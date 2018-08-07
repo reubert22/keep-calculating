@@ -5,7 +5,8 @@ import {
   Text,
   View,
   Image,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Alert
 } from "react-native";
 import RowDivision from "../../_components/RowDivision";
 import ColumnDivision from "../../_components/ColumnDivision";
@@ -15,27 +16,97 @@ import CalcButtons from "../../_components/_calculator/CalcButtons";
 type Props = {};
 
 type State = {
-  result: string
+  current: any,
+  fstNumber: any,
+  operation: any,
+  rec: any
 };
 export default class Home extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      result: "0"
+      current: "",
+      fstNumber: "",
+      operation: null,
+      rec: ""
     };
   }
 
-  handleValue = (digit: any) => {
-    const { result } = this.state;
+  handleValue = (input: any) => {
+    this.setState({ rec: this.state.rec + input });
+    if (this.state.rec !== "123++") {
+      if (["+", "-", "*", "/"].indexOf(input) > -1) {
+        this.setState({
+          operation: input,
+          fstNumber: this.state.current,
+          current: ""
+        });
+        return;
+      } else if (input === "=") {
+        this.calculate(input);
+        return;
+      }
+      this.setState({
+        current: this.state.current + input
+      });
+    } else {
+      Alert.alert(
+        "Info: ",
+        "123++ : get information \n 233++ : set your password",
+        [
+          {
+            text: "Ask me later",
+            onPress: () => console.log("Ask me later pressed")
+          },
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    }
+  };
+
+  calculate = (input: any) => {
+    let calculated;
+    switch (this.state.operation) {
+      case "+":
+        calculated =
+          parseFloat(this.state.fstNumber) + parseFloat(this.state.current);
+        break;
+      case "-":
+        calculated =
+          parseFloat(this.state.fstNumber) - parseFloat(this.state.current);
+        break;
+      case "/":
+        calculated =
+          parseFloat(this.state.fstNumber) / parseFloat(this.state.current);
+        break;
+      case "*":
+        calculated =
+          parseFloat(this.state.fstNumber) * parseFloat(this.state.current);
+        break;
+      default:
+        break;
+    }
+    console.log(calculated);
+    if (calculated) {
+      calculated = calculated.toString();
+    }
     this.setState({
-      result: result + digit
+      current: calculated,
+      operation: null,
+      frstNumber: ""
     });
   };
 
   clearResult = () => {
     this.setState({
-      result: "0"
+      current: ""
     });
   };
 
@@ -52,7 +123,7 @@ export default class Home extends Component<Props, State> {
                 padding: 5
               }}
             >
-              <Text style={styles.result}>{this.state.result}</Text>
+              <Text style={styles.result}>{this.state.current}</Text>
             </View>
             <TouchableNativeFeedback onPress={() => this.clearResult()}>
               <View
