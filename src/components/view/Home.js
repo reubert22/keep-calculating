@@ -13,13 +13,17 @@ import ColumnDivision from "../../_components/ColumnDivision";
 import ClearIcon from "../../img/clearIcon.png";
 import CalcButtons from "../../_components/_calculator/CalcButtons";
 
-type Props = {};
+type Props = {
+  navigator: any
+};
 
 type State = {
-  current: any,
-  fstNumber: any,
+  current: string,
+  fstNumber: string,
   operation: any,
-  rec: any
+  rec: string,
+  password: string,
+  settingPass: boolean
 };
 export default class Home extends Component<Props, State> {
   constructor(props: Props) {
@@ -29,46 +33,124 @@ export default class Home extends Component<Props, State> {
       current: "",
       fstNumber: "",
       operation: null,
-      rec: ""
+      rec: "",
+      password: "",
+      settingPass: false
     };
   }
 
-  handleValue = (input: any) => {
-    this.setState({ rec: this.state.rec + input });
-    if (this.state.rec !== "123++") {
-      if (["+", "-", "*", "/"].indexOf(input) > -1) {
-        this.setState({
-          operation: input,
-          fstNumber: this.state.current,
-          current: ""
-        });
-        return;
-      } else if (input === "=") {
-        this.calculate(input);
-        return;
-      }
-      this.setState({
-        current: this.state.current + input
-      });
+  /*******************************************
+   * Check if the user is editing the password
+   ******************************************/
+  editingPass = () => {
+    const { settingPass } = this.state;
+    return settingPass ? true : false;
+  };
+
+  /******************************************
+   * Check if what user typed is some operand
+   *****************************************/
+  isOperation = (input: string) => {
+    if (["+", "-", "*", "/"].indexOf(input) > -1) {
+      return true;
+    }
+    return false;
+  };
+
+  /**********************************
+   * Giving information boxes to user
+   * 1 - Information about commands
+   * 2 - Info about reset pass
+   *********************************/
+  setMessageBox = (id: number) => {
+    if (id === 1) {
+      Alert.alert(
+        "Information and commands: ",
+        "123++ : Information \n\n222++ : New password \n\n\n**REMEMBER**\nAlways before type your password press '=' ",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     } else {
       Alert.alert(
-        "Info: ",
-        "123++ : get information \n 233++ : set your password",
+        "Your password is about to change !! ",
+        "1. After you press OK you can type \nyour password. \n\n2. It'll be recorded when you press '=' \n\n\nTip: Make an strong password (at least 3 numbers and 2 operands)",
         [
           {
-            text: "Ask me later",
-            onPress: () => console.log("Ask me later pressed")
-          },
-          {
             text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
+            onDismiss: () => {}
           },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
+          { text: "OK", onPress: () => this.openEditPassword() }
         ],
         { cancelable: false }
       );
     }
+  };
+
+  /*************************************
+   * Check if password is OK to redirect
+   ************************************/
+  shouldLogin = () => {
+    const { rec, password } = this.state;
+    if (password !== "" && rec === `=${password}`) {
+      //should go to gallery
+    }
+  };
+
+  handleValue = (input: any) => {
+    this.setState({ rec: this.state.rec + input });
+    this.shouldLogin();
+    if (!this.editingPass()) {
+      if (this.state.rec === "123++") {
+        this.setMessageBox(1);
+      } else if (this.state.rec === "222++") {
+        this.setMessageBox(2);
+      } else {
+        if (this.isOperation(input)) {
+          this.setState({
+            operation: input,
+            fstNumber: this.state.current,
+            current: ""
+          });
+          return;
+        } else if (input === "=" && this.state.operation != null) {
+          this.calculate(input);
+          return;
+        } else if (input === "=" && this.state.operation === null) {
+          this.clearResult();
+          return;
+        }
+        this.setState({
+          current: this.state.current + input
+        });
+      }
+    } else {
+      //editing password
+      if (input === "=") {
+        this.closeEditPassword();
+        input = "";
+      } else {
+        //save to asyncstorage
+        this.setState({
+          password: this.state.password + input,
+          current: "",
+          fstNumber: "",
+          operation: null,
+          rec: ""
+        });
+      }
+    }
+  };
+
+  openEditPassword = () => {
+    this.setState({
+      settingPass: true
+    });
+  };
+
+  closeEditPassword = () => {
+    this.setState({
+      settingPass: false
+    });
   };
 
   calculate = (input: any) => {
@@ -93,7 +175,6 @@ export default class Home extends Component<Props, State> {
       default:
         break;
     }
-    console.log(calculated);
     if (calculated) {
       calculated = calculated.toString();
     }
@@ -104,9 +185,15 @@ export default class Home extends Component<Props, State> {
     });
   };
 
+  /**************
+   * Reset values
+   *************/
   clearResult = () => {
     this.setState({
-      current: ""
+      current: "",
+      fstNumber: "",
+      operation: null,
+      rec: ""
     });
   };
 

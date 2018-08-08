@@ -6,8 +6,8 @@ type Props = {};
 export default class Gallery extends Component<Props> {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>I'm your gallery</Text>
+      <View style={{ flex: 1 }}>
+        <Text>I'm your gallery</Text>
       </View>
     );
   }
