@@ -197,14 +197,20 @@ export default class Home extends Component<Props, State> {
       default:
         break;
     }
-    if (calculated) {
+    if (calculated && !isNaN(calculated) && calculated !== undefined) {
       calculated = calculated.toString();
+      this.setState({
+        current: calculated,
+        operation: null,
+        frstNumber: ""
+      });
+    } else {
+      this.setState({
+        current: "",
+        operation: null,
+        frstNumber: ""
+      });
     }
-    this.setState({
-      current: calculated,
-      operation: null,
-      frstNumber: ""
-    });
   };
 
   /**************
