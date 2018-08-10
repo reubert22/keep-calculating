@@ -12,6 +12,7 @@ import RowDivision from "../../_components/RowDivision";
 import ColumnDivision from "../../_components/ColumnDivision";
 import ClearIcon from "../../img/clearIcon.png";
 import CalcButtons from "../../_components/_calculator/CalcButtons";
+import { passwordStore } from "../../store/PasswordStore";
 
 type Props = {
   navigator: any
@@ -23,7 +24,8 @@ type State = {
   operation: any,
   rec: string,
   password: string,
-  settingPass: boolean
+  settingPass: boolean,
+  fromDb: string
 };
 export default class Home extends Component<Props, State> {
   constructor(props: Props) {
@@ -35,9 +37,18 @@ export default class Home extends Component<Props, State> {
       operation: null,
       rec: "",
       password: "",
-      settingPass: false
+      settingPass: false,
+      fromDb: ""
     };
   }
+
+  componentDidMount = () => {
+    passwordStore.getPassword().then(result => {
+      console.log("fromDB: ", result);
+      this.setState({ password: result });
+    });
+    /* passwordStore.deletePassword(); */
+  };
 
   /*******************************************
    * Check if the user is editing the password
@@ -91,63 +102,74 @@ export default class Home extends Component<Props, State> {
    ************************************/
   shouldLogin = () => {
     const { rec, password } = this.state;
-    if (password !== "" && rec === `=${password}`) {
+    console.log("pass", password, rec);
+    let compare = rec.replace(/=/g, "");
+    if (password !== "" && compare === password) {
       //should go to gallery
+      this.setMessageBox(1);
+      //return true;
     }
+    return false;
   };
 
   handleValue = (input: any) => {
     this.setState({ rec: this.state.rec + input });
-    this.shouldLogin();
-    if (!this.editingPass()) {
-      if (this.state.rec === "123++") {
-        this.setMessageBox(1);
-      } else if (this.state.rec === "222++") {
-        this.setMessageBox(2);
-      } else {
-        if (this.isOperation(input)) {
+    if (!this.shouldLogin()) {
+      if (!this.editingPass()) {
+        if (this.state.rec === "22++") {
+          this.setMessageBox(1);
+        } else if (this.state.rec === "22--") {
+          this.setMessageBox(2);
+        } else {
+          if (this.isOperation(input)) {
+            this.setState({
+              operation: input,
+              fstNumber: this.state.current,
+              current: ""
+            });
+            return;
+          } else if (input === "=" && this.state.operation != null) {
+            this.calculate(input);
+            return;
+          } else if (input === "=" && this.state.operation === null) {
+            this.clearResult();
+            return;
+          }
           this.setState({
-            operation: input,
-            fstNumber: this.state.current,
-            current: ""
+            current: this.state.current + input
           });
-          return;
-        } else if (input === "=" && this.state.operation != null) {
-          this.calculate(input);
-          return;
-        } else if (input === "=" && this.state.operation === null) {
-          this.clearResult();
-          return;
         }
-        this.setState({
-          current: this.state.current + input
-        });
-      }
-    } else {
-      //editing password
-      if (input === "=") {
-        this.closeEditPassword();
-        input = "";
       } else {
-        //save to asyncstorage
-        this.setState({
-          password: this.state.password + input,
-          current: "",
-          fstNumber: "",
-          operation: null,
-          rec: ""
-        });
+        //editing password
+        if (input === "=") {
+          this.closeEditPassword();
+          input = "";
+        } else {
+          //save to asyncstorage
+          this.setState({
+            password: this.state.password + input,
+            current: "",
+            fstNumber: "",
+            operation: null,
+            rec: ""
+          });
+        }
       }
     }
   };
 
   openEditPassword = () => {
     this.setState({
+      password: "",
       settingPass: true
     });
   };
 
   closeEditPassword = () => {
+    const { password } = this.state;
+    if (password) {
+      passwordStore.savePassword(this.state.password);
+    }
     this.setState({
       settingPass: false
     });
