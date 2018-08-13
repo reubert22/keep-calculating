@@ -1,5 +1,5 @@
 //@flow
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import {
   StyleSheet,
   Text,
@@ -27,7 +27,7 @@ type State = {
   settingPass: boolean,
   fromDb: string
 };
-export default class Home extends Component<Props, State> {
+export default class Home extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -47,7 +47,6 @@ export default class Home extends Component<Props, State> {
       console.log("fromDB: ", result);
       this.setState({ password: result });
     });
-    /* passwordStore.deletePassword(); */
   };
 
   /*******************************************
@@ -81,7 +80,7 @@ export default class Home extends Component<Props, State> {
         [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
-    } else {
+    } else if (id === 2) {
       Alert.alert(
         "Your password is about to change !! ",
         "1. After you press OK you can type \nyour password. \n\n2. It'll be recorded when you press '=' \n\n\nTip: Make an strong password (at least 3 numbers and 2 operands)",
@@ -94,7 +93,22 @@ export default class Home extends Component<Props, State> {
         ],
         { cancelable: false }
       );
+    } else {
+      Alert.alert(
+        "Password successfully changed! ",
+        "",
+        [{ text: "OK", onPress: () => {} }],
+        { cancelable: false }
+      );
     }
+  };
+
+  checkSubmit = (input: any) => {
+    const { operation } = this.state;
+    if (input === "=" && operation != null) {
+      return true;
+    }
+    return false;
   };
 
   /*************************************
@@ -102,52 +116,51 @@ export default class Home extends Component<Props, State> {
    ************************************/
   shouldLogin = () => {
     const { rec, password } = this.state;
-    console.log("pass", password, rec);
+
     let compare = rec.replace(/=/g, "");
     if (password !== "" && compare === password) {
       //should go to gallery
       this.setMessageBox(1);
-      //return true;
     }
     return false;
   };
 
   handleValue = (input: any) => {
-    this.setState({ rec: this.state.rec + input });
+    const { rec, current, operation, password } = this.state;
+    this.setState({ rec: rec + input });
+
     if (!this.shouldLogin()) {
       if (!this.editingPass()) {
-        if (this.state.rec === "22++") {
+        if (rec === "22++") {
           this.setMessageBox(1);
-        } else if (this.state.rec === "22--") {
+        } else if (rec === "22--") {
           this.setMessageBox(2);
         } else {
           if (this.isOperation(input)) {
             this.setState({
               operation: input,
-              fstNumber: this.state.current,
+              fstNumber: current,
               current: ""
             });
             return;
-          } else if (input === "=" && this.state.operation != null) {
+          } else if (this.checkSubmit(input)) {
             this.calculate(input);
             return;
-          } else if (input === "=" && this.state.operation === null) {
+          } else if (this.checkSubmit(input)) {
             this.clearResult();
             return;
           }
           this.setState({
-            current: this.state.current + input
+            current: current + input
           });
         }
       } else {
-        //editing password
         if (input === "=") {
           this.closeEditPassword();
           input = "";
         } else {
-          //save to asyncstorage
           this.setState({
-            password: this.state.password + input,
+            password: password + input,
             current: "",
             fstNumber: "",
             operation: null,
@@ -169,6 +182,7 @@ export default class Home extends Component<Props, State> {
     const { password } = this.state;
     if (password) {
       passwordStore.savePassword(this.state.password);
+      this.setMessageBox(3);
     }
     this.setState({
       settingPass: false

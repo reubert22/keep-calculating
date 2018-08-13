@@ -1,21 +1,29 @@
 //@flow
-import React, { Component } from "react";
-import { TouchableNativeFeedback, View, Text, StyleSheet } from "react-native";
+import React, { PureComponent } from "react";
+import {
+  TouchableNativeFeedback,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity
+} from "react-native";
+import ColumnDivision from "../ColumnDivision";
 
 type Props = {
   value: string,
   handlePress: any
 };
 
-export default class CalcButtons extends Component<Props> {
+export default class CalcButtons extends PureComponent<Props> {
   render() {
     const { value, handlePress } = this.props;
     return (
-      <TouchableNativeFeedback onPress={() => handlePress(value)}>
-        <View style={styles.containerButtons}>
-          <Text style={styles.buttons}>{value}</Text>
-        </View>
-      </TouchableNativeFeedback>
+      <TouchableOpacity
+        style={styles.containerButtons}
+        onPress={() => handlePress(value)}
+      >
+        <Text style={styles.buttons}>{value}</Text>
+      </TouchableOpacity>
     );
   }
 }
