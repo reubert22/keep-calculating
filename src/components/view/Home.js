@@ -4,15 +4,18 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   TouchableNativeFeedback,
   Alert
 } from "react-native";
+import { Navigation } from "react-native-navigation";
+
 import RowDivision from "../../_components/RowDivision";
 import ColumnDivision from "../../_components/ColumnDivision";
 import ClearIcon from "../../img/clearIcon.png";
 import CalcButtons from "../../_components/_calculator/CalcButtons";
 import { passwordStore } from "../../store/PasswordStore";
+import ClearButton from "../../_components/_calculator/ClearButton";
+import { messageHandler } from "../../_components/_calculator/HandleMessage.js/Messages";
 
 type Props = {
   navigator: any
@@ -74,12 +77,7 @@ export default class Home extends PureComponent<Props, State> {
    *********************************/
   setMessageBox = (id: number) => {
     if (id === 1) {
-      Alert.alert(
-        "Information and commands: ",
-        "123++ : Information \n\n222++ : New password \n\n\n**REMEMBER**\nAlways before type your password press '=' ",
-        [{ text: "OK", onPress: () => {} }],
-        { cancelable: false }
-      );
+      messageHandler.info();
     } else if (id === 2) {
       Alert.alert(
         "Your password is about to change !! ",
@@ -94,12 +92,7 @@ export default class Home extends PureComponent<Props, State> {
         { cancelable: false }
       );
     } else {
-      Alert.alert(
-        "Password successfully changed! ",
-        "",
-        [{ text: "OK", onPress: () => {} }],
-        { cancelable: false }
-      );
+      messageHandler.success();
     }
   };
 
@@ -254,17 +247,7 @@ export default class Home extends PureComponent<Props, State> {
             >
               <Text style={styles.result}>{this.state.current}</Text>
             </View>
-            <TouchableNativeFeedback onPress={() => this.clearResult()}>
-              <View
-                style={{
-                  width: "20%",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <Image style={styles.clearIcon} source={ClearIcon} />
-              </View>
-            </TouchableNativeFeedback>
+            <ClearButton onPress={this.clearResult} />
           </View>
         </View>
 
@@ -272,15 +255,9 @@ export default class Home extends PureComponent<Props, State> {
           {/* 1 */}
           <CalcButtons value={"7"} handlePress={() => this.handleValue("7")} />
 
-          <ColumnDivision />
-
           <CalcButtons value={"8"} handlePress={() => this.handleValue("8")} />
 
-          <ColumnDivision />
-
           <CalcButtons value={"9"} handlePress={() => this.handleValue("9")} />
-
-          <ColumnDivision />
 
           <CalcButtons value={"/"} handlePress={() => this.handleValue("/")} />
         </View>
@@ -289,15 +266,9 @@ export default class Home extends PureComponent<Props, State> {
         <View style={styles.containerRows}>
           <CalcButtons value={"4"} handlePress={() => this.handleValue("4")} />
 
-          <ColumnDivision />
-
           <CalcButtons value={"5"} handlePress={() => this.handleValue("5")} />
 
-          <ColumnDivision />
-
           <CalcButtons value={"6"} handlePress={() => this.handleValue("6")} />
-
-          <ColumnDivision />
 
           <CalcButtons value={"*"} handlePress={() => this.handleValue("*")} />
         </View>
@@ -306,15 +277,9 @@ export default class Home extends PureComponent<Props, State> {
         <View style={styles.containerRows}>
           <CalcButtons value={"1"} handlePress={() => this.handleValue("1")} />
 
-          <ColumnDivision />
-
           <CalcButtons value={"2"} handlePress={() => this.handleValue("2")} />
 
-          <ColumnDivision />
-
           <CalcButtons value={"3"} handlePress={() => this.handleValue("3")} />
-
-          <ColumnDivision />
 
           <CalcButtons value={"-"} handlePress={() => this.handleValue("-")} />
         </View>
@@ -323,18 +288,12 @@ export default class Home extends PureComponent<Props, State> {
         <View style={styles.containerRows}>
           <CalcButtons value={","} handlePress={() => this.handleValue(",")} />
 
-          <ColumnDivision />
-
           <CalcButtons
             value={"00"}
             handlePress={() => this.handleValue("00")}
           />
 
-          <ColumnDivision />
-
           <CalcButtons value={"0"} handlePress={() => this.handleValue("0")} />
-
-          <ColumnDivision />
 
           <CalcButtons value={"+"} handlePress={() => this.handleValue("+")} />
         </View>
@@ -357,14 +316,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    padding: 5,
     backgroundColor: "#000"
-  },
-  containerButtons: {
-    width: "24.6%",
-    backgroundColor: "#3b3c3d",
-    alignItems: "center",
-    justifyContent: "center"
   },
   containerEqual: {
     width: "100%",
@@ -383,10 +335,6 @@ const styles = StyleSheet.create({
   result: {
     fontSize: 40,
     color: "#06FF06"
-  },
-  clearIcon: {
-    width: 30,
-    height: 30
   },
   containerRows: {
     flexDirection: "row",

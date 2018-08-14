@@ -7,15 +7,22 @@ registerScreens();
 
 Navigation.startSingleScreenApp({
   screen: {
-    screen: "myapp.Home",
+    screen: "myapp.Gallery",
     title: "Home",
     navigatorStyle: {
-      navBarHidden: true
-    }
-  },
-  drawer: {
-    left: {
-      screen: "myapp.Menu"
+      //navBarHidden: true
+      navBarBackgroundColor: "#062D52",
+      navBarTextFontFamily: "Montserrat-bold",
+      navBarTextFontSize: 20,
+      navBarTextColor: "#fff",
+      navBarButtonColor: "black",
+      navBarTitleTextCentered: true,
+
+      topBarElevationShadowEnabled: false,
+      topBarBorderColor: "#062D52",
+      topBarBorderWidth: 3.5,
+      statusBarTextColorScheme: "light",
+      orientation: "portrait"
     }
   }
 });
@@ -24,9 +31,9 @@ Navigation.startSingleScreenApp({
   tabs: [
     {
       label: "One", // tab label as appears under the icon in iOS (optional)
-      screen: "myapp.Home", // unique ID registered with Navigation.registerScreen
-      icon: require("./src/img/home.png"), // local image asset for the tab icon unselected state (optional on iOS)
-      tabBarSelectedButtonColor: require("./src/img/home.png"), // local image asset for the tab icon selected state (optional, iOS only. On Android, Use `tabBarSelectedButtonColor` instead)
+      screen: "myapp.Gallery", // unique ID registered with Navigation.registerScreen
+      icon: require("./src/img/clearIcon.png"), // local image asset for the tab icon unselected state (optional on iOS)
+      tabBarSelectedButtonColor: require("./src/img/clearIcon.png"), // local image asset for the tab icon selected state (optional, iOS only. On Android, Use `tabBarSelectedButtonColor` instead)
 
       title: "Screen One", // title of the screen as appears in the nav bar (optional)
       //titleImage: require("../img/titleImage.png"), // iOS only. navigation bar title image instead of the title text of the pushed screen (optional)
@@ -38,8 +45,8 @@ Navigation.startSingleScreenApp({
     {
       label: "Two",
       screen: "myapp.Menu",
-      icon: require("./src/img/home.png"), // local image asset for the tab icon unselected state (optional on iOS)
-      tabBarSelectedButtonColor: require("./src/img/home.png"),
+      icon: require("./src/img/clearIcon.png"), // local image asset for the tab icon unselected state (optional on iOS)
+      tabBarSelectedButtonColor: require("./src/img/clearIcon.png"),
       title: "Screen Two"
     }
   ],

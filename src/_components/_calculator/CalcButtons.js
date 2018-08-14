@@ -1,12 +1,6 @@
 //@flow
 import React, { PureComponent } from "react";
-import {
-  TouchableNativeFeedback,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import ColumnDivision from "../ColumnDivision";
 
 type Props = {
@@ -20,7 +14,7 @@ export default class CalcButtons extends PureComponent<Props> {
     return (
       <TouchableOpacity
         style={styles.containerButtons}
-        onPress={() => handlePress(value)}
+        onPress={this.props.handlePress}
       >
         <Text style={styles.buttons}>{value}</Text>
       </TouchableOpacity>
@@ -30,10 +24,11 @@ export default class CalcButtons extends PureComponent<Props> {
 
 const styles = StyleSheet.create({
   containerButtons: {
-    width: "24.6%",
+    width: "25%",
     backgroundColor: "#3b3c3d",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    margin: 1
   },
   buttons: {
     fontSize: 24,

@@ -5,6 +5,6 @@ import { View } from "react-native";
 type Props = {};
 export default class RowDivision extends PureComponent<Props> {
   render() {
-    return <View style={{ height: 1 }} />;
+    return <View style={{ height: 0.5 }} />;
   }
 }
