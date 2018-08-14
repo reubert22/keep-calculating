@@ -9,13 +9,15 @@ export default class Gallery extends Component<Props> {
 
     this.state = { actualContent: "hey", menuSelected: 0 };
   }
-  handleBorder = () => {
-    if (this.state.menuSelected === 1)
+  handleBorder = (selected: number) => {
+    if (this.state.menuSelected === selected) {
       return {
         borderTopWidth: 3,
         borderTopColor: "red"
       };
+    }
   };
+
   changingContent = (id: number) => {
     let content;
     if (id === 1) {
@@ -41,39 +43,22 @@ export default class Gallery extends Component<Props> {
           }}
         >
           <TouchableNativeFeedback onPress={() => this.changingContent(1)}>
-            <View
-              style={{
-                width: "33.33%",
-                height: 65,
-                backgroundColor: "powderblue",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-              id={1}
-            >
-              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
+            <View style={[styles.menus, this.handleBorder(1)]}>
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>
                 Fotos
               </Text>
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback onPress={() => this.changingContent(2)}>
-            <View style={[styles.menus, this.handleBorder()]}>
-              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
+            <View style={[styles.menus, this.handleBorder(2)]}>
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>
                 Videos
               </Text>
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback onPress={() => this.changingContent(3)}>
-            <View
-              style={{
-                width: "33.33%",
-                height: 65,
-                backgroundColor: "powderblue",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
+            <View style={[styles.menus, this.handleBorder(3)]}>
+              <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>
                 Anotações
               </Text>
             </View>
@@ -91,7 +76,7 @@ const styles = StyleSheet.create({
   menus: {
     width: "33.33%",
     height: 65,
-    backgroundColor: "powderblue",
+    backgroundColor: "#063e72",
     alignItems: "center",
     justifyContent: "center"
   }
