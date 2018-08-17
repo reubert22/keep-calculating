@@ -1,14 +1,27 @@
 //@flow
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableNativeFeedback } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableNativeFeedback,
+  FlatList,
+  ScrollView
+} from "react-native";
+import PictureView from "../../_components/_keeper/PictureView";
+import VideoView from "../../_components/_keeper/VideoView";
+import TipsView from "../../_components/_keeper/TipsView";
 
 type Props = {};
 export default class Gallery extends Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { actualContent: "hey", menuSelected: 0 };
+    this.state = {
+      menuSelected: 1
+    };
   }
+
   handleBorder = (selected: number) => {
     if (this.state.menuSelected === selected) {
       return {
@@ -19,20 +32,28 @@ export default class Gallery extends Component<Props> {
   };
 
   changingContent = (id: number) => {
-    let content;
-    if (id === 1) {
-      content = <Text>Foto</Text>;
-    } else if (id === 2) {
-      content = <Text>Video</Text>;
-    } else {
-      content = <Text>Anotações</Text>;
-    }
     this.setState({
-      actualContent: content,
       menuSelected: id
     });
   };
+
+  componentDidMount() {
+    this.setState({
+      menuSelected: 1
+    });
+  }
+
   render() {
+    const { menuSelected } = this.state;
+    let content;
+    if (menuSelected === 1) {
+      content = <PictureView />;
+    } else if (menuSelected === 2) {
+      content = <VideoView />;
+    } else {
+      content = <TipsView />;
+    }
+
     return (
       <View style={{ flex: 1, backgroundColor: "#062D52" }}>
         <View
@@ -64,9 +85,9 @@ export default class Gallery extends Component<Props> {
             </View>
           </TouchableNativeFeedback>
         </View>
-        <View style={{ height: "88%", backgroundColor: "#fff" }}>
-          <Text>{this.state.actualContent}</Text>
-        </View>
+        <ScrollView style={{ height: "88%", backgroundColor: "#fff" }}>
+          {content}
+        </ScrollView>
       </View>
     );
   }
