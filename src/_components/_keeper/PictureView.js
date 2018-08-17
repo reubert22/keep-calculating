@@ -1,6 +1,7 @@
 //@flow
 import React, { PureComponent } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import ActionButton from "react-native-action-button";
 
 export default class PictureView extends PureComponent<> {
   render() {
@@ -78,6 +79,12 @@ export default class PictureView extends PureComponent<> {
             </Text>
           </View>
         </View>
+        <ActionButton
+          buttonColor="rgba(231,76,60,1)"
+          onPress={() => {
+            console.log("hi");
+          }}
+        />
       </View>
     );
   }
