@@ -8,7 +8,7 @@ export const messageHandler = {
 function info() {
   Alert.alert(
     "Information and commands: ",
-    "22++ : Information \n\n22-- : New password \n\n\n**REMEMBER**\nAlways before type your password press '=' ",
+    "222++ : Information \n\n222-- : New password \n\n\n**REMEMBER**\nAlways before type your password press '=' ",
     [{ text: "OK", onPress: () => {} }],
     { cancelable: false }
   );

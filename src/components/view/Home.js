@@ -47,7 +47,6 @@ export default class Home extends PureComponent<Props, State> {
 
   componentDidMount = () => {
     passwordStore.getPassword().then(result => {
-      console.log("fromDB: ", result);
       this.setState({ password: result });
     });
   };
@@ -109,11 +108,28 @@ export default class Home extends PureComponent<Props, State> {
    ************************************/
   shouldLogin = () => {
     const { rec, password } = this.state;
+    const { navigator } = this.props;
 
     let compare = rec.replace(/=/g, "");
     if (password !== "" && compare === password) {
-      //should go to gallery
-      this.setMessageBox(1);
+      navigator.push({
+        screen: "myapp.Gallery",
+        title: "Keep calculating",
+        navigatorStyle: {
+          navBarBackgroundColor: "#062D52",
+          navBarTextFontFamily: "Montserrat-bold",
+          navBarTextFontSize: 20,
+          navBarTextColor: "#fff",
+          navBarButtonColor: "black",
+          navBarTitleTextCentered: true,
+
+          topBarElevationShadowEnabled: false,
+          topBarBorderColor: "#062D52",
+          topBarBorderWidth: 3.5,
+          statusBarTextColorScheme: "light",
+          orientation: "portrait"
+        }
+      });
     }
     return false;
   };
@@ -124,9 +140,9 @@ export default class Home extends PureComponent<Props, State> {
 
     if (!this.shouldLogin()) {
       if (!this.editingPass()) {
-        if (rec === "22++") {
+        if (rec === "222++") {
           this.setMessageBox(1);
-        } else if (rec === "22--") {
+        } else if (rec === "222--") {
           this.setMessageBox(2);
         } else {
           if (this.isOperation(input)) {

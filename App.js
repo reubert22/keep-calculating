@@ -7,22 +7,10 @@ registerScreens();
 
 Navigation.startSingleScreenApp({
   screen: {
-    screen: "myapp.Gallery",
+    screen: "myapp.Home",
     title: "Home",
     navigatorStyle: {
-      //navBarHidden: true
-      navBarBackgroundColor: "#062D52",
-      navBarTextFontFamily: "Montserrat-bold",
-      navBarTextFontSize: 20,
-      navBarTextColor: "#fff",
-      navBarButtonColor: "black",
-      navBarTitleTextCentered: true,
-
-      topBarElevationShadowEnabled: false,
-      topBarBorderColor: "#062D52",
-      topBarBorderWidth: 3.5,
-      statusBarTextColorScheme: "light",
-      orientation: "portrait"
+      navBarHidden: true
     }
   }
 });
