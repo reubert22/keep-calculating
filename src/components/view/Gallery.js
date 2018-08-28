@@ -25,8 +25,8 @@ export default class Gallery extends Component<Props> {
   handleBorder = (selected: number) => {
     if (this.state.menuSelected === selected) {
       return {
-        borderTopWidth: 3,
-        borderTopColor: "red"
+        borderBottomWidth: 3,
+        borderBottomColor: "red"
       };
     }
   };
@@ -58,7 +58,7 @@ export default class Gallery extends Component<Props> {
       <View style={{ flex: 1, backgroundColor: "#062D52" }}>
         <View
           style={{
-            height: "12%",
+            height: "12.5%",
             flexDirection: "row",
             backgroundColor: "red"
           }}
@@ -85,7 +85,7 @@ export default class Gallery extends Component<Props> {
             </View>
           </TouchableNativeFeedback>
         </View>
-        <ScrollView style={{ height: "88%", backgroundColor: "#fff" }}>
+        <ScrollView style={{ height: "87%", backgroundColor: "#fff" }}>
           {content}
         </ScrollView>
       </View>
