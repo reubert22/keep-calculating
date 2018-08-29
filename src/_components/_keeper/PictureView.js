@@ -2,8 +2,27 @@
 import React, { PureComponent } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import ActionButton from "react-native-action-button";
+import { Navigation } from "react-native-navigation";
 
-export default class PictureView extends PureComponent<> {
+type Props = {
+  navigator: any
+};
+
+export default class PictureView extends PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+  }
+
+  handleCamView = () => {
+    this.props.navigator.push({
+      screen: "myapp.ImageCameraView",
+      title: "",
+      navigatorStyle: {
+        navBarHidden: true
+      }
+    });
+  };
+
   render() {
     return (
       <View style={styles.containerPictures}>
@@ -81,9 +100,7 @@ export default class PictureView extends PureComponent<> {
         </View>
         <ActionButton
           buttonColor="rgba(231,76,60,1)"
-          onPress={() => {
-            console.log("hi");
-          }}
+          onPress={() => this.handleCamView()}
         />
       </View>
     );

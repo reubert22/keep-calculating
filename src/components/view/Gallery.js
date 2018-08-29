@@ -11,8 +11,9 @@ import {
 import PictureView from "../../_components/_keeper/PictureView";
 import VideoView from "../../_components/_keeper/VideoView";
 import TipsView from "../../_components/_keeper/TipsView";
+import { Navigation } from "react-native-navigation";
 
-type Props = {};
+type Props = { navigator: any };
 export default class Gallery extends Component<Props> {
   constructor(props: Props) {
     super(props);
