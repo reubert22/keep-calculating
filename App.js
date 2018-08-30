@@ -8,7 +8,12 @@ registerScreens();
 if (__DEV__) {
   Navigation.startSingleScreenApp({
     screen: {
-      screen: "myapp.Gallery",
+      screen: "myapp.ImageCameraView",
+      title: "",
+      navigatorStyle: {
+        navBarHidden: true
+      }
+      /* screen: "myapp.Gallery",
       title: "Keep calculating",
       navigatorStyle: {
         navBarBackgroundColor: "#062D52",
@@ -23,7 +28,7 @@ if (__DEV__) {
         topBarBorderWidth: 3.5,
         statusBarTextColorScheme: "light",
         orientation: "portrait"
-      }
+      } */
     }
   });
 } else {

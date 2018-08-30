@@ -48,7 +48,7 @@ export default class Gallery extends Component<Props> {
     const { menuSelected } = this.state;
     let content;
     if (menuSelected === 1) {
-      content = <PictureView />;
+      content = <PictureView navigator={this.props.navigator} />;
     } else if (menuSelected === 2) {
       content = <VideoView />;
     } else {

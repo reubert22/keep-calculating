@@ -1,39 +1,99 @@
 //@flow
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { CameraKitCameraScreen } from "react-native-camera-kit";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableNativeFeedback
+} from "react-native";
+import { CameraKitCamera } from "react-native-camera-kit";
+import CaptureBtn from "../../img/cameraButton.png";
+import ChangeCameraBtn from "../../img/cameraFlipIcon.png";
 
 export default class ImageCameraView extends PureComponent<Props> {
   constructor(props: Props) {
     super(props);
   }
 
-  onBottomButtonPressed(event) {
-    const captureImages = JSON.stringify(event.captureImages);
-    Alert.alert(
-      `${event.type} button pressed`,
-      `${captureImages}`,
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false }
-    );
-  }
+  capturePicture = async () => {
+    let x: any = await this.camera.capture(true);
+    //console.log("salvar em AsyncStorage: ", x);
+  };
+
+  changeCamera = () => {
+    this.camera.changeCamera();
+  };
 
   render() {
     return (
       <View style={styles.containerPictures}>
-        <CameraKitCameraScreen
-          actions={{ rightButtonText: "Done", leftButtonText: "Cancel" }}
-          onBottomButtonPressed={() => {
-            console.log("hey");
+        <CameraKitCamera
+          ref={cam => (this.camera = cam)}
+          style={{
+            flex: 1,
+            backgroundColor: "white"
           }}
-          flashImages={{
-            on: require("../../img/flashOn.png"),
-            off: require("../../img/flashOff.png"),
-            auto: require("../../img/flashAuto.png")
+          cameraOptions={{
+            flashMode: "auto",
+            focusMode: "on",
+            zoomMode: "on",
+            ratioOverlay: "1:1"
           }}
-          cameraFlipImage={require("../../img/cameraFlipIcon.png")}
-          captureButtonImage={require("../../img/cameraButton.png")}
+          onReadQRCode={event =>
+            console.log(event.nativeEvent.qrcodeStringValue)
+          }
         />
+        {/* Put below on BtnImgCamera */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end"
+          }}
+        >
+          <TouchableNativeFeedback onPress={this.changeCamera}>
+            <View
+              style={{
+                width: 60,
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Image source={ChangeCameraBtn} />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={this.capturePicture}>
+            <View
+              style={{
+                paddingTop: 10
+              }}
+            >
+              <Image
+                style={{
+                  width: 60,
+                  height: 60,
+                  paddingTop: 5,
+                  paddingBottom: 5
+                }}
+                source={CaptureBtn}
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback>
+            <View
+              style={{
+                width: 60,
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Text style={{ color: "#fff", fontSize: 20 }}>OK</Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
       </View>
     );
   }
@@ -41,7 +101,7 @@ export default class ImageCameraView extends PureComponent<Props> {
 
 const styles = StyleSheet.create({
   containerPictures: {
-    flex: 1,
-    backgroundColor: "white"
+    flex: 2,
+    backgroundColor: "#000"
   }
 });

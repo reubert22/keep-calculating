@@ -128,7 +128,8 @@ export default class Home extends PureComponent<Props, State> {
           topBarBorderWidth: 3.5,
           statusBarTextColorScheme: "light",
           orientation: "portrait"
-        }
+        },
+        passProps: { navigator }
       });
     }
     return false;
