@@ -86,7 +86,12 @@ export default class Gallery extends Component<Props> {
             </View>
           </TouchableNativeFeedback>
         </View>
-        <ScrollView style={{ height: "87%", backgroundColor: "#fff" }}>
+        <ScrollView
+          style={{
+            height: "87%",
+            backgroundColor: "#fff"
+          }}
+        >
           {content}
         </ScrollView>
       </View>

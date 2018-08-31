@@ -5,15 +5,10 @@ import { registerScreens } from "./src/screens";
 
 registerScreens();
 
-if (__DEV__) {
+/* if (__DEV__) {
   Navigation.startSingleScreenApp({
     screen: {
-      screen: "myapp.ImageCameraView",
-      title: "",
-      navigatorStyle: {
-        navBarHidden: true
-      }
-      /* screen: "myapp.Gallery",
+      screen: "myapp.Gallery",
       title: "Keep calculating",
       navigatorStyle: {
         navBarBackgroundColor: "#062D52",
@@ -28,17 +23,17 @@ if (__DEV__) {
         topBarBorderWidth: 3.5,
         statusBarTextColorScheme: "light",
         orientation: "portrait"
-      } */
-    }
-  });
-} else {
-  Navigation.startSingleScreenApp({
-    screen: {
-      screen: "myapp.Home",
-      title: "Home",
-      navigatorStyle: {
-        navBarHidden: true
       }
     }
   });
-}
+} else { */
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: "myapp.Home",
+    title: "Home",
+    navigatorStyle: {
+      navBarHidden: true
+    }
+  }
+});
+//}

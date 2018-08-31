@@ -1,16 +1,26 @@
 //@flow
 import React, { PureComponent } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import ActionButton from "react-native-action-button";
 import { Navigation } from "react-native-navigation";
+import { imageStore } from "../../store/ImageStore";
+import imageService from "../../services/image.service";
 
 type Props = {
   navigator: any
 };
 
+type State = {
+  imgsFromDb: Array<any>
+};
+
 export default class PictureView extends PureComponent<Props> {
   constructor(props: Props) {
     super(props);
+
+    this.state = {
+      imgsFromDb: []
+    };
   }
 
   handleCamView = () => {
@@ -23,81 +33,35 @@ export default class PictureView extends PureComponent<Props> {
     });
   };
 
+  componentDidMount() {
+    imageService.get().then(images => {
+      this.setState({
+        imgsFromDb: images
+      });
+    });
+  }
+
   render() {
+    const { imgsFromDb } = this.state;
     return (
       <View style={styles.containerPictures}>
-        <View style={styles.containerRow}>
-          <View style={styles.imgsLeft}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              1
-            </Text>
-          </View>
-          <View style={styles.imgsRight}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              2
-            </Text>
-          </View>
-        </View>
-        <View style={styles.containerRow}>
-          <View style={styles.imgsLeft}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              3
-            </Text>
-          </View>
-          <View style={styles.imgsRight}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              4
-            </Text>
-          </View>
-        </View>
-        <View style={styles.containerRow}>
-          <View style={styles.imgsLeft}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              5
-            </Text>
-          </View>
-          <View style={styles.imgsRight}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              6
-            </Text>
-          </View>
-        </View>
-        <View style={styles.containerRow}>
-          <View style={styles.imgsLeft}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              5
-            </Text>
-          </View>
-          <View style={styles.imgsRight}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              6
-            </Text>
-          </View>
-        </View>
-        <View style={styles.containerRow}>
-          <View style={styles.imgsLeft}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              7
-            </Text>
-          </View>
-          <View style={styles.imgsRight}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              8
-            </Text>
-          </View>
-        </View>
-        <View style={styles.containerRow}>
-          <View style={styles.imgsLeft}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              9
-            </Text>
-          </View>
-          <View style={styles.imgsRight}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "#000" }}>
-              10
-            </Text>
-          </View>
-        </View>
+        {imgsFromDb.length > 0 &&
+          imgsFromDb.map((item, index) => {
+            return (
+              <View style={styles.imgs} key={index}>
+                <Image
+                  style={{
+                    height: "100%",
+                    width: "100%"
+                  }}
+                  source={{
+                    uri: item.uri
+                  }}
+                />
+              </View>
+            );
+          })}
+
         <ActionButton
           buttonColor="rgba(231,76,60,1)"
           onPress={() => this.handleCamView()}
@@ -110,27 +74,13 @@ export default class PictureView extends PureComponent<Props> {
 const styles = StyleSheet.create({
   containerPictures: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "white"
-  },
-  containerRow: {
     flexDirection: "row",
-    marginBottom: 1
+    flexWrap: "wrap",
+    padding: 2
   },
-  imgsLeft: {
-    marginRight: 1,
+  imgs: {
     width: "50%",
     height: 150,
-    backgroundColor: "powderblue",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  imgsRight: {
-    marginLeft: 1,
-    width: "50%",
-    height: 150,
-    backgroundColor: "skyblue",
-    alignItems: "center",
-    justifyContent: "center"
+    padding: 1
   }
 });
